@@ -3,6 +3,7 @@ const applicationState = {
 }
 
 const API = "http://localhost:8088"
+const mainContainer = document.querySelector("#container");
 
 export const fetchRequests = () => {
    return fetch(`${API}/requests`)
@@ -30,9 +31,16 @@ export const sendRequest = (userServiceRequest) => {
     return fetch(`${API}/requests`, fetchOptions)
         .then(response => response.json())
         .then(() => {
-    // Add this...
-    const mainContainer = document.querySelector("#container");
-    mainContainer.dispatchEvent(new CustomEvent("stateChanged"))
-
+            mainContainer.dispatchEvent(new CustomEvent("stateChanged"))
         })
 }
+
+export const deleteRequest = (id) => {
+    return fetch(`${API}/requests/${id}`, { method: "DELETE" })
+        .then(
+            () => {
+                mainContainer.dispatchEvent(new CustomEvent("stateChanged"))
+            }
+        )
+}
+
